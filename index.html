@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo especial para ti</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        video {
+            max-width: 100%;
+            border-radius: 10px;
+            display: none; /* Ocultar video por defecto */
+        }
+        h1, p {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        .question {
+            display: none;
+        }
+        .question.active {
+            display: block;
+        }
+        .hidden {
+            display: none;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Respondeme estas preguntas mi amorrr :D</h1>
+        <div id="quiz">
+            <div class="question active" id="question1">
+                <p>¿En qué fecha te toque por primera vez Cyclone?</p>
+                <input type="radio" id="q1a" name="question1" value="14/07/2023">
+                <label for="q1a">14/07/2023</label><br>
+                <input type="radio" id="q1b" name="question1" value="12/07/2023">
+                <label for="q1b">12/07/2023</label><br>
+                <input type="radio" id="q1c" name="question1" value="8/07/2023">
+                <label for="q1c">8/07/2023</label><br>
+                <button onclick="nextQuestion(1)">Siguiente</button>
+            </div>
+            <div class="question" id="question2">
+                <p>¿Cuál era la promoción del walmart?</p>
+                <input type="radio" id="q2a" name="question2" value="Monster + Agua + Cartas">
+                <label for="q2a">Monster+Agua+Cartas</label><br>
+                <input type="radio" id="q2b" name="question2" value="Red Bull + Agua + Cartas">
+                <label for="q2b">Red Bull + Agua + Cartas</label><br>
+                <input type="radio" id="q2c" name="question2" value="Prime + Agua + Cartas">
+                <label for="q2c">Prime + Agua + Cartas</label><br>
+                <button onclick="nextQuestion(2)">Siguiente</button>
+            </div>
+            <div class="question" id="question3">
+                <p>¿Primeras gomitas que te compre?</p>
+                <input type="radio" id="q3a" name="question3" value="gusanitos">
+                <label for="q3a">gusanitos</label><br>
+                <input type="radio" id="q3b" name="question3" value="tiburones">
+                <label for="q3b">tiburones</label><br>
+                <input type="radio" id="q3c" name="question3" value="nerds">
+                <label for="q3c">nerds</label><br>
+                <button onclick="nextQuestion(3)">Siguiente</button>
+            </div>
+            <div class="question" id="question4">
+                <p>¿Qué vitela lancé a la pileta del Hard Rock para pedir el deseo?</p>
+                <input type="radio" id="q4a" name="question4" value="Guitar center">
+                <label for="q4a">Guitar center</label><br>
+                <input type="radio" id="q4b" name="question4" value="Hard Rock">
+                <label for="q4b">Hard Rock</label><br>
+                <input type="radio" id="q4c" name="question4" value="Pink Floyd">
+                <label for="q4c">Pink Floyd</label><br>
+                <button onclick="nextQuestion(4)">Siguiente</button>
+            </div>
+            <div class="question" id="question5">
+                <p>¿Postre que comimos en navidad?</p>
+                <input type="radio" id="q5a" name="question5" value="Gelatina">
+                <label for="q5a">Gelatina</label><br>
+                <input type="radio" id="q5b" name="question5" value="Duraznos">
+                <label for="q5b">Duraznos</label><br>
+                <input type="radio" id="q5c" name="question5" value="Tres leches">
+                <label for="q5c">Tres leches</label><br>
+                <button onclick="checkAnswers()">Enviar</button>
+            </div>
+        </div>
+        <p id="feedback" class="hidden"></p>
+        <video id="video" controls>
+            <source src="video.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de video.
+        </video>
+    </div>
+    <script>
+        const correctAnswers = {
+            question1: "14/07/2023",
+            question2: "Monster + Agua + Cartas",
+            question3: "gusanitos",
+            question4: "Guitar center",
+            question5: "Gelatina"
+        };
+
+        function nextQuestion(currentQuestion) {
+            const currentElement = document.getElementById(`question${currentQuestion}`);
+            const nextElement = document.getElementById(`question${currentQuestion + 1}`);
+            
+            if (document.querySelector(`input[name="question${currentQuestion}"]:checked`)) {
+                currentElement.classList.remove('active');
+                nextElement.classList.add('active');
+            } else {
+                alert("Por favor, selecciona una respuesta.");
+            }
+        }
+
+        function checkAnswers() {
+            let allCorrect = true;
+            for (let key in correctAnswers) {
+                const selectedOption = document.querySelector(`input[name="${key}"]:checked`).value;
+                if (correctAnswers[key] !== selectedOption) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+            const feedback = document.getElementById('feedback');
+            const video = document.getElementById('video');
+            if (allCorrect) {
+                feedback.textContent = "¡De ley te ibas a acordar todo! ¡Qué inteligente que es mi novia!";
+                feedback.className = "success";
+                video.style.display = "block";
+            } else {
+                feedback.textContent = "¿Como no vas a saber? :( Recarga la página mi amor, no te equivoques de de nuevo.";
+                feedback.className = "error";
+            }
+            feedback.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
+
